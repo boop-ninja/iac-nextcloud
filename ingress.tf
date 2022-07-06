@@ -28,16 +28,6 @@ resource "kubernetes_ingress_v1" "i" {
   }
 
   spec {
-    default_backend {
-      service {
-        name = var.app_name
-        port {
-          number = 80
-        }
-      }
-    }
-
-
     rule {
       host = var.domain_name
       http {
@@ -51,7 +41,7 @@ resource "kubernetes_ingress_v1" "i" {
             }
           }
 
-          path = "/*"
+          path = "/"
         }
       }
     }
