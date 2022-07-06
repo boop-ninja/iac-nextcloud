@@ -18,7 +18,7 @@ resource "kubernetes_service" "i" {
   }
 }
 
-resource "kubernetes_ingress" "i" {
+resource "kubernetes_ingress_v1" "i" {
   depends_on = [kubernetes_namespace.i, kubernetes_service.i]
 
   metadata {
@@ -28,18 +28,34 @@ resource "kubernetes_ingress" "i" {
   }
 
   spec {
+    default_backend {
+      service {
+        name = var.app_name
+        port {
+          number = 80
+        }
+      }
+    }
+
+
     rule {
       host = var.domain_name
       http {
         path {
           backend {
-            service_name = var.app_name
-            service_port = 80
+            service {
+              name = var.app_name
+              port {
+                number = 80
+              }
+            }
           }
-          path = "/"
+
+          path = "/*"
         }
       }
     }
+
     tls {
       secret_name = kubernetes_secret.tls.metadata[0].name
     }

@@ -17,10 +17,10 @@ locals {
   pgdata = "/var/lib/postgresql/data/pgdata"
   containers = {
     database = {
-      image = var.database_image
-      path  = local.pgdata
+      image    = var.database_image
+      path     = local.pgdata
       pvc_name = "${local.namespace}-pgdata-pv-claim"
-      size  = "20G"
+      size     = "20G"
       environment = {
         PGDATA        = local.pgdata
         POSTGRES_DB   = "nextcloud"
@@ -28,10 +28,10 @@ locals {
       }
     }
     application = {
-      image = var.app_image
-      path  = "/var/www/html"
+      image    = var.app_image
+      path     = "/var/www/html"
       pvc_name = "${local.namespace}-data-pv-claim"
-      size  = "20G"
+      size     = "20G"
       environment = {
         POSTGRES_HOST = "127.0.0.1:3306"
         POSTGRES_DB   = "nextcloud"
@@ -65,9 +65,9 @@ resource "kubernetes_persistent_volume_claim" "i" {
       requests = {
         storage = each.value.size
       }
-//      limits = {
-//        storage = each.value.size
-//      }
+      //      limits = {
+      //        storage = each.value.size
+      //      }
     }
   }
 }
@@ -158,9 +158,9 @@ resource "kubernetes_deployment" "i" {
 
 resource "kubernetes_cron_job" "i" {
   metadata {
-    name = "nextcloud-webcron"
+    name      = "nextcloud-webcron"
     namespace = local.namespace
-    labels = local.common_labels
+    labels    = local.common_labels
   }
   spec {
     concurrency_policy            = "Replace"

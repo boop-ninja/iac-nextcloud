@@ -9,7 +9,7 @@ resource "tls_private_key" "i" {
 }
 
 resource "tls_self_signed_cert" "i" {
-  key_algorithm   = tls_private_key.i.algorithm
+  # key_algorithm   = tls_private_key.i.algorithm
   private_key_pem = tls_private_key.i.private_key_pem
 
   # Certificate expires after 12 hours.
