@@ -148,6 +148,7 @@ resource "kubernetes_deployment" "i" {
             volume_mount {
               mount_path = container.value["path"]
               name       = kubernetes_persistent_volume_claim.i[container.key].metadata[0].name
+              sub_path  = container.value["pvc_name"]
             }
           }
         }
