@@ -157,7 +157,7 @@ resource "kubernetes_deployment" "i" {
   }
 }
 
-resource "kubernetes_cron_job" "i" {
+resource "kubernetes_cron_job_v1" "i" {
   metadata {
     name      = "nextcloud-webcron"
     namespace = local.namespace
