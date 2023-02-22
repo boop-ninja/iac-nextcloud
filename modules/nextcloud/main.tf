@@ -5,12 +5,32 @@ terraform {
   }
 }
 
+resource "kubernetes_secret" "i" {
+  depends_on = [data.kubernetes_namespace.i]
+  metadata {
+    name      = "${var.name}-db-pass"
+    namespace = var.namespace
+
+  }
+
+  type = "Opaque"
+
+  data = {
+    POSTGRES_PASSWORD = var.database_config.password
+  }
+
+}
+
+
 resource "kubernetes_config_map" "i" {
   metadata {
     name      = var.name
     namespace = var.namespace
   }
-  data = var.database_config
+  data = {
+    POSTGRES_DB   = var.database_config.database
+    POSTGRES_USER = var.database_config.username
+  }
 }
 
 resource "kubernetes_deployment" "i" {
@@ -37,6 +57,12 @@ resource "kubernetes_deployment" "i" {
           volume_mount {
             name       = "nextcloud-data"
             mount_path = "/var/www/html"
+          }
+
+          env_from {
+            secret_ref {
+              name = kubernetes_secret.i.metadata[0].name
+            }
           }
 
           env_from {
