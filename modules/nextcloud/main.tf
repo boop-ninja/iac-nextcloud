@@ -17,13 +17,12 @@ resource "kubernetes_deployment" "i" {
   metadata {
     name      = var.name
     namespace = var.namespace
+    labels    = var.labels
   }
 
   spec {
     selector {
-      match_labels = {
-        app = var.name
-      }
+      match_labels = var.labels
     }
 
 
