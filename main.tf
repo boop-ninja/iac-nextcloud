@@ -22,6 +22,7 @@ locals {
       pvc_name = "${local.namespace}-pgdata-pv-claim"
       size     = "20G"
       environment = {
+        
         PGDATA        = local.pgdata
         POSTGRES_DB   = "nextcloud"
         POSTGRES_USER = "nextcloud"
@@ -33,7 +34,7 @@ locals {
       pvc_name = "${local.namespace}-data-pv-claim"
       size     = "20G"
       environment = {
-        POSTGRES_HOST = "127.0.0.1:3306"
+        POSTGRES_HOST = "127.0.0.1:5432"
         POSTGRES_DB   = "nextcloud"
         POSTGRES_USER = "nextcloud"
       }
@@ -148,7 +149,7 @@ resource "kubernetes_deployment" "i" {
             volume_mount {
               mount_path = container.value["path"]
               name       = kubernetes_persistent_volume_claim.i[container.key].metadata[0].name
-              sub_path  = container.value["pvc_name"]
+              sub_path   = container.value["pvc_name"]
             }
           }
         }
