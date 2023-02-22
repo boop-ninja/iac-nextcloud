@@ -81,6 +81,10 @@ resource "kubernetes_deployment" "i" {
               name = kubernetes_config_map.i.metadata.0.name
             }
           }
+
+          port {
+            container_port = 80
+          }
         }
         volume {
           name = "nextcloud-data"
