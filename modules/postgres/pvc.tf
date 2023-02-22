@@ -12,7 +12,7 @@ resource "kubernetes_persistent_volume_claim" "i" {
   }
 
   spec {
-    access_modes = ["ReadWriteMany"]
+    access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
         storage = local.size
