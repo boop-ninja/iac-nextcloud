@@ -5,6 +5,10 @@ terraform {
   }
 }
 
+locals {
+  port = 5432
+}
+
 data "kubernetes_namespace" "i" {
   metadata {
     name = var.namespace
@@ -34,9 +38,8 @@ resource "kubernetes_config_map" "i" {
     namespace = var.namespace
   }
   data = {
-    POSTGRES_DB       = var.database_config.database
-    POSTGRES_USER     = var.database_config.username
-    POSTGRES_PASSWORD = var.database_config.password
+    POSTGRES_DB   = var.database_config.database
+    POSTGRES_USER = var.database_config.username
   }
 }
 
@@ -91,7 +94,7 @@ resource "kubernetes_deployment" "i" {
           }
 
           port {
-            container_port = 5432
+            container_port = local.port
           }
         }
         volume {
@@ -115,14 +118,14 @@ resource "kubernetes_service" "i" {
   spec {
     selector = var.labels
     port {
-      port        = 5432
-      target_port = 5432
+      port        = local.port
+      target_port = local.port
     }
   }
 }
 
-output "cluster_ip" {
-  value       = kubernetes_service.i.spec.0.cluster_ip
+output "host" {
+  value       = "${kubernetes_service.i.spec.0.cluster_ip}:${local.port}"
   sensitive   = true
   description = "description"
   depends_on  = [kubernetes_service.i]
