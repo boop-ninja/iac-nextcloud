@@ -51,6 +51,7 @@ resource "kubernetes_deployment" "i" {
           volume_mount {
             name       = "${var.name}-pgdata"
             mount_path = "/var/lib/postgresql/data/pgdata"
+            sub_path   = "pgdata"
           }
 
           env_from {
