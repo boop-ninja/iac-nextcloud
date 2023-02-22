@@ -5,6 +5,12 @@ terraform {
   }
 }
 
+data "kubernetes_namespace" "i" {
+  metadata {
+    name = var.namespace
+  }
+}
+
 resource "kubernetes_secret" "i" {
   depends_on = [data.kubernetes_namespace.i]
   metadata {
@@ -23,6 +29,7 @@ resource "kubernetes_secret" "i" {
 
 
 resource "kubernetes_config_map" "i" {
+  depends_on = [data.kubernetes_namespace.i]
   metadata {
     name      = var.name
     namespace = var.namespace
@@ -34,6 +41,10 @@ resource "kubernetes_config_map" "i" {
 }
 
 resource "kubernetes_deployment" "i" {
+  depends_on = [
+    kubernetes_secret.i,
+    kubernetes_config_map.i,
+  ]
   metadata {
     name      = var.name
     namespace = var.namespace

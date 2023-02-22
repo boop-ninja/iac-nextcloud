@@ -41,7 +41,11 @@ resource "kubernetes_config_map" "i" {
 }
 
 resource "kubernetes_deployment" "i" {
-  depends_on = [kubernetes_config_map.i]
+  depends_on = [
+    kubernetes_secret.i,
+    kubernetes_config_map.i,
+    data.kubernetes_namespace.i,
+  ]
 
   metadata {
     name      = var.name
