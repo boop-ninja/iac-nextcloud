@@ -34,3 +34,9 @@ variable "database_config" {
   })
   description = "description"
 }
+
+variable "trusted_domain" {
+  type        = string
+  default     = "localhost"
+  description = "description"
+}

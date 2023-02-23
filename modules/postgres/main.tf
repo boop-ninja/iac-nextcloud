@@ -94,7 +94,7 @@ resource "kubernetes_deployment" "i" {
           }
 
           port {
-            name = "postgres"
+            name           = "postgres"
             container_port = local.port
           }
         }
@@ -127,7 +127,7 @@ resource "kubernetes_service" "i" {
 }
 
 output "host" {
-  value       = "${kubernetes_service.i.spec.0.cluster_ip}:${local.port}"
+  value       = "${kubernetes_service.i.metadata[0].name}.${data.kubernetes_namespace.i.metadata[0].name}.svc.cluster.local:${local.port}"
   description = "description"
   depends_on  = [kubernetes_service.i]
 }

@@ -35,6 +35,8 @@ resource "kubernetes_config_map" "i" {
     namespace = var.namespace
   }
   data = {
+    NEXTCLOUD_TRUSTED_DOMAINS = var.trusted_domain
+    POSTGRES_HOST = var.database_config.host
     POSTGRES_DB   = var.database_config.database
     POSTGRES_USER = var.database_config.username
   }
