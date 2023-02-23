@@ -9,9 +9,9 @@ resource "kubernetes_service" "i" {
     session_affinity = "ClientIP"
 
     port {
-      name        = local.ports.application.name
+      name        = "http"
       port        = 80
-      target_port = local.ports.application.port
+      target_port = "http"
     }
 
     type = "ClusterIP"
@@ -36,6 +36,7 @@ resource "kubernetes_ingress_v1" "i" {
             service {
               name = var.app_name
               port {
+                name = "http"
                 number = 80
               }
             }

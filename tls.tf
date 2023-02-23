@@ -32,6 +32,7 @@ resource "tls_self_signed_cert" "i" {
     common_name  = var.domain_name
     organization = var.domain_name
   }
+
 }
 
 resource "kubernetes_secret" "tls" {
