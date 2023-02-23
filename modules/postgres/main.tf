@@ -61,13 +61,13 @@ resource "kubernetes_deployment" "i" {
       match_labels = var.labels
     }
 
-
     template {
       metadata {
         labels = var.labels
       }
       spec {
         container {
+
           image = var.image
           name  = var.name
           volume_mount {
@@ -94,6 +94,7 @@ resource "kubernetes_deployment" "i" {
           }
 
           port {
+            name = "postgres"
             container_port = local.port
           }
         }
@@ -114,19 +115,19 @@ resource "kubernetes_service" "i" {
   metadata {
     name      = var.name
     namespace = var.namespace
+    labels    = var.labels
   }
   spec {
     selector = var.labels
     port {
       port        = local.port
-      target_port = local.port
+      target_port = "postgres"
     }
   }
 }
 
 output "host" {
   value       = "${kubernetes_service.i.spec.0.cluster_ip}:${local.port}"
-  sensitive   = true
   description = "description"
   depends_on  = [kubernetes_service.i]
 }
