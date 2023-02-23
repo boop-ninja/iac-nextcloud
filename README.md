@@ -10,7 +10,6 @@ Deploy Nextcloud to Kubernetes
 4. `terraform init`
 5. `terraform apply`
 
-
 ## Upgrading database
 
 ### Backup Database
