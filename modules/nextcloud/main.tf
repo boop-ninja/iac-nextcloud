@@ -85,7 +85,7 @@ resource "kubernetes_deployment" "i" {
           }
 
           port {
-            name = "http"
+            name           = "http"
             container_port = 80
           }
         }
