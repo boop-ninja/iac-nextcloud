@@ -74,6 +74,8 @@ module "nextcloud" {
 
   labels    = local.common_labels
   namespace = local.namespace
+  image = var.app_image
+
   database_config = merge(local.database_config, {
     host = module.database.host
   })
