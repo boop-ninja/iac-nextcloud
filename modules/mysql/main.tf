@@ -6,7 +6,7 @@ terraform {
 }
 
 locals {
-  port = 5432
+  port = 3306
 }
 
 data "kubernetes_namespace" "i" {
