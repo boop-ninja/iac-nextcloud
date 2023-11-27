@@ -8,7 +8,7 @@ locals {
   }
   ports = {
     database = {
-      name = "postgres"
+      name = "db"
       port = 3306
     }
     application = {
@@ -16,18 +16,16 @@ locals {
       port = 80
     }
   }
-  pgdata = "/var/lib/postgresql/data/pgdata"
+  database_data = "/var/lib/mysql"
   containers = {
     database = {
       image    = var.database_image
-      path     = local.pgdata
-      pvc_name = "${local.namespace}-pgdata-pv-claim"
+      path     = local.database_data
+      pvc_name = "${local.namespace}-dbdata-pv-claim"
       size     = "20G"
       environment = {
-
-        PGDATA        = local.pgdata
-        POSTGRES_DB   = "nextcloud"
-        POSTGRES_USER = "nextcloud"
+        MYSQL_DATABASE = "nextcloud"
+        MYSQL_USER     = "nextcloud"
       }
     }
     application = {
@@ -36,9 +34,9 @@ locals {
       pvc_name = "${local.namespace}-data-pv-claim"
       size     = "20G"
       environment = {
-        POSTGRES_HOST = "127.0.0.1:5432"
-        POSTGRES_DB   = "nextcloud"
-        POSTGRES_USER = "nextcloud"
+        MYSQL_ROOT_HOST = "127.0.0.1:3306"
+        MYSQL_DATABASE  = "nextcloud"
+        MYSQL_USER      = "nextcloud"
       }
     }
   }
@@ -56,14 +54,14 @@ locals {
   database_config = {
     database = "nextcloud"
     username = "nextcloud"
-    password = var.postgres_password
+    password = var.database_password
   }
 }
 
 
 module "database" {
   depends_on = [kubernetes_namespace.i]
-  source     = "./modules/postgres"
+  source     = "./modules/mysql"
 
   labels          = local.common_labels
   namespace       = local.namespace

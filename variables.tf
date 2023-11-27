@@ -32,11 +32,11 @@ variable "app_image" {
 
 variable "database_image" {
   type        = string
-  default     = "postgres:10"
+  default     = "mysql:8.0-debian"
   description = "The image in which you would like to use"
 }
 
-variable "postgres_password" {
+variable "database_password" {
   type    = string
   default = "changeme"
 }

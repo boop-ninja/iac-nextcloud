@@ -1,6 +1,6 @@
 
 locals {
-  pvc_name = "${var.namespace}-pgdata-pv-claim"
+  pvc_name = "${var.namespace}-dbdata-pv-claim"
   size     = "20G"
 }
 

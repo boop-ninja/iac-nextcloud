@@ -1,19 +1,19 @@
 variable "image" {
   type        = string
-  default     = "postgres:15"
+  default     = "mysql:8.0-debian"
   description = "description"
 }
 
 variable "name" {
   type        = string
-  default     = "postgres"
+  default     = "db"
   description = "description"
 }
 
 
 variable "namespace" {
   type        = string
-  default     = "postgres"
+  default     = "nextcloud"
   description = "description"
 }
 

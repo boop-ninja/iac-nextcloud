@@ -22,7 +22,7 @@ resource "kubernetes_secret" "i" {
   type = "Opaque"
 
   data = {
-    POSTGRES_PASSWORD = var.database_config.password
+    MYSQL_ROOT_PASSWORD = var.database_config.password
   }
 
 }
@@ -36,9 +36,9 @@ resource "kubernetes_config_map" "i" {
   }
   data = {
     NEXTCLOUD_TRUSTED_DOMAINS = var.trusted_domain
-    POSTGRES_HOST             = var.database_config.host
-    POSTGRES_DB               = var.database_config.database
-    POSTGRES_USER             = var.database_config.username
+    MYSQL_ROOT_HOST           = var.database_config.host
+    MYSQL_DATABASE            = var.database_config.database
+    MYSQL_ROOT_PASSWORD       = var.database_config.username
   }
 }
 

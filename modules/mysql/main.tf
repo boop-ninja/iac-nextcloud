@@ -20,13 +20,12 @@ resource "kubernetes_secret" "i" {
   metadata {
     name      = "${var.name}-db-pass"
     namespace = var.namespace
-
   }
 
   type = "Opaque"
 
   data = {
-    POSTGRES_PASSWORD = var.database_config.password
+    MYSQL_ROOT_PASSWORD = var.database_config.password
   }
 
 }
@@ -38,8 +37,8 @@ resource "kubernetes_config_map" "i" {
     namespace = var.namespace
   }
   data = {
-    POSTGRES_DB   = var.database_config.database
-    POSTGRES_USER = var.database_config.username
+    MYSQL_DATABASE   = var.database_config.database
+    MYSQL_USER = var.database_config.username
   }
 }
 
@@ -71,14 +70,9 @@ resource "kubernetes_deployment" "i" {
           image = var.image
           name  = var.name
           volume_mount {
-            name       = "${var.name}-pgdata"
-            mount_path = "/app/data/pgdata"
+            name       = "${var.name}-dbdata"
+            mount_path = "/var/lib/mysql"
             sub_path   = kubernetes_persistent_volume_claim.i.metadata.0.name
-          }
-
-          env {
-            name  = "PGDATA"
-            value = "/app/data/pgdata"
           }
 
           env_from {
@@ -94,12 +88,12 @@ resource "kubernetes_deployment" "i" {
           }
 
           port {
-            name           = "postgres"
+            name           = "db"
             container_port = local.port
           }
         }
         volume {
-          name = "${var.name}-pgdata"
+          name = "${var.name}-dbdata"
           persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim.i.metadata.0.name
           }
@@ -121,7 +115,7 @@ resource "kubernetes_service" "i" {
     selector = var.labels
     port {
       port        = local.port
-      target_port = "postgres"
+      target_port = "db"
     }
   }
 }
