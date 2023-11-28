@@ -12,6 +12,13 @@ resource "kubernetes_cron_job" "i" {
     job_template {
       spec {
         template {
+          metadata {
+            name = "nextcloud-webcron"
+            namespace = data.kubernetes_namespace.i.metadata[0].name
+            labels = {
+              app = "nextcloud-webcron"
+            }
+          }
           spec {
             container {
               image = "quay.io/curl/curl:latest"
