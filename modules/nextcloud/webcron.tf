@@ -13,8 +13,6 @@ resource "kubernetes_cron_job" "i" {
       spec {
         template {
           metadata {
-            name = "nextcloud-webcron"
-            namespace = data.kubernetes_namespace.i.metadata[0].name
             labels = {
               app = "nextcloud-webcron"
             }
