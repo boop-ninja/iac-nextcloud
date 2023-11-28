@@ -25,6 +25,11 @@ resource "kubernetes_ingress_v1" "i" {
     name      = var.app_name
     namespace = var.app_name
     labels    = local.common_labels
+    annotations = {
+      "traefik.http.routers.nextcloud.middlewares"            = "nextcloud-redirectregex"
+      "traefik.ingress.kubernetes.io/router.tls"              = true
+      "traefik.ingress.kubernetes.io/router.tls.certresolver" = "acme"
+    }
   }
 
   spec {
@@ -47,7 +52,7 @@ resource "kubernetes_ingress_v1" "i" {
     }
 
     tls {
-      secret_name = kubernetes_secret.tls.metadata[0].name
+      secret_name = "nextcloud-tls"
     }
   }
 }
