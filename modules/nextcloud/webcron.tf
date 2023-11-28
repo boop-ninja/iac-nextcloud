@@ -10,6 +10,11 @@ resource "kubernetes_cron_job" "i" {
     failed_jobs_history_limit = 1
     concurrency_policy = "Forbid"
     job_template {
+      metadata {
+        labels = {
+          app = "nextcloud-webcron"
+        }
+      }
       spec {
         template {
           metadata {
