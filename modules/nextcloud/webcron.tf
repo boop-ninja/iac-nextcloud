@@ -1,7 +1,7 @@
 resource "kubernetes_cron_job" "i" {
   metadata {
     name = "nextcloud-webcron"
-    namespace = data.kubernetes_namespace.i.metadata.name
+    namespace = data.kubernetes_namespace.i.metadata[0].name
   }
 
   spec {
